@@ -1,52 +1,20 @@
 (ns httprepo.core-test
   (:use clojure.test
-        httprepo.core
-        compojure.core)
-  (:require [cemerick.pomegranate.aether :as aether]
-            [cemerick.friend :as friend]
-            (cemerick.friend [workflows :as workflows]
-                             [credentials :as creds])
-            [compojure.route :as route]
-            [compojure.handler :as handler]
-            [clojure.java.io :as io]
-            [ring.adapter.jetty :as jetty]
-            [ring.middleware.file :as file]))
+        httprepo.core)
+  (:require [clojure.java.io :as io]
+            [cemerick.pomegranate.aether :as aether]
+            [ring.adapter.jetty :as jetty]))
 
 
 (declare test-port)
+
 (def tmp-dir (io/file (System/getProperty "java.io.tmpdir") "httprepo"))
 (def tmp-local-repo-dir (io/file tmp-dir "local-repo"))
 (def tmp-local-repo2-dir (io/file tmp-dir "local-repo2"))
-(def tmp-remote-repo (io/file tmp-dir "remote-repo"))
-
-(def users {"root" {:username "root"
-                    :password (creds/hash-bcrypt "admin_password")
-                    :roles #{::admin}}})
-
-(defroutes mock-routes
-  (PUT "*" request
-       (do (let [sent-file (io/file (str (.getAbsolutePath tmp-remote-repo)
-                                         (:* (:route-params request))))]
-             (-> sent-file
-                 .getParentFile
-                 .mkdirs)
-             (with-open [wrtr (io/writer sent-file)]
-               (.write wrtr (slurp (:body request)))))
-           {:status 201 :headers {} :body nil})))
-
-(def mock-app
-  (handler/api
-   (-> (friend/wrap-authorize mock-routes #{::admin})
-       (friend/authenticate {:credential-fn
-                             (partial creds/bcrypt-credential-fn users)
-                             :workflows [(workflows/http-basic)]})
-       (file/wrap-file (-> tmp-remote-repo
-                           (doto .mkdirs)
-                           .getAbsolutePath)))))
 
 (defn- run-test-app
   [f]
-  (let [server (jetty/run-jetty #'mock-app {:port 0 :join? false})
+  (let [server (jetty/run-jetty repo-app {:port 0 :join? false})
         port (-> server .getConnectors first .getLocalPort)]
     (with-redefs [test-port port]
       (try

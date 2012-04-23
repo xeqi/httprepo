@@ -4,8 +4,9 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [compojure "1.0.1"]]
+                 [compojure "1.0.1"]
+                 [environ "0.2.1"]
+                 [com.cemerick/friend "0.0.7"]]
   :profiles {:test {:resource-paths ["test-resources"]
                     :dependencies [[com.cemerick/pomegranate "0.0.12-SNAPSHOT"]
-                                   [ring "1.0.2"]
-                                   [com.cemerick/friend "0.0.7"]]}})
+                                   [ring "1.0.2"]]}})

@@ -1,12 +1,14 @@
 # httprepo
 
-I'm an app. Or maybe I'm a library? I haven't decided yet. 
-
-The choice is up to you!
+A proof of concept http based maven repo with an admin user for deploy.
 
 ## Usage
 
-FIXME
+None yet.
+
+## Testing
+
+Using leiningen version 2 ```REPO=/tmp/httprepo/remote-repo lein test```
 
 ## License
 
