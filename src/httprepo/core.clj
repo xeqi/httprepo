@@ -8,7 +8,7 @@
             [ring.middleware.file :as file]
             [environ.core :refer [env]]))
 
-(def users {"root" {:username "root"
+(def users {"admin" {:username "admin"
                     :password (creds/hash-bcrypt "admin_password")
                     :roles #{::admin}}})
 

@@ -7,6 +7,8 @@
                  [compojure "1.0.1"]
                  [environ "0.2.1"]
                  [com.cemerick/friend "0.0.7"]]
+  :plugins [[lein-ring "0.6.4"]]
+  :ring {:handler httprepo.core/repo-app}
   :profiles {:test {:resource-paths ["test-resources"]
                     :dependencies
                     [[ring/ring-jetty-adapter "1.0.1"]

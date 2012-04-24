@@ -4,11 +4,25 @@ A proof of concept http based maven repo with an admin user for deploy.
 
 ## Usage
 
-None yet.
+```REPO=/path/to/repo lein ring server-headless```
+
+In leiningen use:
+
+```
+{"httprepo" "http://localhost:3000"}
+```
+for read access.
+
+```
+{"httprepo" {:url "http://localhost:3000
+             :username "admin"
+             :password "admin_password"}}
+```
+to get read + deploy access.
 
 ## Testing
 
-Using leiningen version 2 ```REPO=/tmp/httprepo/remote-repo lein test```
+Using leiningen v2: ```REPO=/tmp/httprepo/remote-repo lein test```
 
 ## License
 

@@ -44,7 +44,7 @@ Raise an exception if any deletion fails unless silently is true."
    :jar-file (io/file (io/resource "demo-1.0.0.jar"))
    :pom-file (io/file (io/resource "demo-1.0.0.pom"))
    :repository {"local" {:url (str "http://localhost:" test-port)
-                         :username "root"
+                         :username "admin"
                          :password "admin_password"}}
    :local-repo tmp-local-repo-dir)
   (is (= '{[demo "1.0.0"] nil}
