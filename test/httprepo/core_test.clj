@@ -38,17 +38,44 @@ Raise an exception if any deletion fails unless silently is true."
                         (delete-file-recursively tmp-dir))
                       (f)))
 
-(deftest a-test
+(deftest admin-can-deploy
   (aether/deploy
-   :coordinates '[demo/demo "1.0.0"]
+   :coordinates '[org.demo/demo.logic "1.0.0"]
    :jar-file (io/file (io/resource "demo-1.0.0.jar"))
    :pom-file (io/file (io/resource "demo-1.0.0.pom"))
    :repository {"local" {:url (str "http://localhost:" test-port)
                          :username "admin"
                          :password "admin_password"}}
    :local-repo tmp-local-repo-dir)
-  (is (= '{[demo "1.0.0"] nil}
+  (is (= '{[org.demo/demo.logic "1.0.0"] nil}
          (aether/resolve-dependencies
-          :coordinates '[[demo/demo "1.0.0"]]
+          :coordinates '[[org.demo/demo.logic "1.0.0"]]
           :repositories {"local" {:url (str "http://localhost:" test-port)}}
           :local-repo tmp-local-repo2-dir))))
+
+(deftest user-can-deploy-to-demo-group
+  (aether/deploy
+   :coordinates '[demo "1.0.0"]
+   :jar-file (io/file (io/resource "demo-1.0.0.jar"))
+   :pom-file (io/file (io/resource "demo-1.0.0.pom"))
+   :repository {"local" {:url (str "http://localhost:" test-port)
+                         :username "user"
+                         :password "user_password"}}
+   :local-repo tmp-local-repo-dir)
+  (is (= '{[demo "1.0.0"] nil}
+         (aether/resolve-dependencies
+          :coordinates '[[demo "1.0.0"]]
+          :repositories {"local" {:url (str "http://localhost:" test-port)}}
+          :local-repo tmp-local-repo2-dir))))
+
+(deftest user-cannot-deploy-to-another-group
+  (is (thrown-with-msg? org.sonatype.aether.deployment.DeploymentException
+        #"Unauthorized"
+        (aether/deploy
+         :coordinates '[another "1.0.0"]
+         :jar-file (io/file (io/resource "demo-1.0.0.jar"))
+         :pom-file (io/file (io/resource "demo-1.0.0.pom"))
+         :repository {"local" {:url (str "http://localhost:" test-port)
+                               :username "user"
+                               :password "user_password"}}
+         :local-repo tmp-local-repo-dir))))

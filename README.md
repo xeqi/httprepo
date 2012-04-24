@@ -11,14 +11,21 @@ In leiningen use:
 ```
 {"httprepo" "http://localhost:3000"}
 ```
-for read access.
+for full read access.
+
+```
+{"httprepo" {:url "http://localhost:3000"
+             :username "user"
+             :password "user_password"}}
+```
+to get full read access, and deploy to the "demo" groupid access.
 
 ```
 {"httprepo" {:url "http://localhost:3000"
              :username "admin"
              :password "admin_password"}}
 ```
-to get read + deploy access.
+to get full read + deploy access.
 
 ## Testing
 
