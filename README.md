@@ -14,7 +14,7 @@ In leiningen use:
 for read access.
 
 ```
-{"httprepo" {:url "http://localhost:3000
+{"httprepo" {:url "http://localhost:3000"
              :username "admin"
              :password "admin_password"}}
 ```
